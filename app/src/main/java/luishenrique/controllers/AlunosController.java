@@ -1,4 +1,4 @@
-package marcocarvalho.controllers;
+package luishenrique.controllers;
 
 import java.util.Optional;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import marcocarvalho.models.Aluno;
-import marcocarvalho.repositories.AlunosRepository;
+import luishenrique.models.Aluno;
+import luishenrique.repositories.AlunosRepository;
 
 @Controller
 @RequestMapping("/alunos")
@@ -43,5 +43,14 @@ public class AlunosController {
         Optional<Aluno> aluno = alunosRepo.findById(id);
         model.addAttribute("aluno", aluno.get());
         return "/alunos/update";
+    }
+
+    @RequestMapping(value = "update", method = RequestMethod.POST)
+    public String saveUpdate(@RequestParam("nome") String nome, @RequestParam("idade") int idade, @RequestParam("id") int id) {
+        Optional<Aluno> aluno = alunosRepo.findById(id);
+        aluno.get().setNome(nome);
+        aluno.get().setIdade(idade);
+        alunosRepo.save(aluno.get());
+        return "redirect:/alunos/list";
     }
 }
